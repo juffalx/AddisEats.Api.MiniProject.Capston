@@ -29,4 +29,17 @@ public class RestaurantsController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{id}/menu")]
+
+    public ActionResult GetById(int id, [FromQuery] string menu)
+    {
+        var foundRestaunrat = _restaurantService.GetById(id);
+
+        if (foundRestaunrat == null)
+        {
+            return NotFound();
+        }
+
+        return Ok($"{foundRestaunrat} {menu}");
+    }
 }
