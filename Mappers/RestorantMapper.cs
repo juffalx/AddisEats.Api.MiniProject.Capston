@@ -8,8 +8,11 @@ public static class RestaurantMapper
     {
         return new RestaurantDTO
         (
-            r.OwnerPhone,
-            r.CommissionRate
+            r.Id,
+            r.Name,
+            r.Area,
+            r.DeliveryFeeEtb,
+            r.IsActive
         );
     }
 }

@@ -1,6 +1,10 @@
 namespace AddisEats.Api.MiniProject.Capston.DTOs;
 
 public record RestaurantDTO(
-    string OwnerPhone,
-    decimal CommissionRate 
+    int Id,
+    string Name,
+    string Area,
+    decimal DeliveryFeeEtb,
+    bool IsActive
+
 );
