@@ -1,0 +1,6 @@
+@AddisEats.Api.MiniProject.Capston_HostAddress = http://localhost:5241
+
+GET {{AddisEats.Api.MiniProject.Capston_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
