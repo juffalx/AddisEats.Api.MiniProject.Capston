@@ -40,6 +40,6 @@ public class RestaurantsController : ControllerBase
             return NotFound();
         }
 
-        return Ok($"{foundRestaunrat} {menu}");
+        return Ok($"{foundRestaunrat.Name} {menu}");
     }
 }
