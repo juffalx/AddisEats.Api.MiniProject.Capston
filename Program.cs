@@ -9,9 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
-// builder.Services.AddCors(o => o.AddPolicy("frontend", p =>
-// p.WithOrigins("http://localhost:5173") // Vite
-// .AllowAnyHeader().AllowAnyMethod()));
+builder.Services.AddCors(o => o.AddPolicy("frontend", p =>
+p.WithOrigins("http://localhost:5173") // Vite
+.AllowAnyHeader().AllowAnyMethod()));
 
 
 
