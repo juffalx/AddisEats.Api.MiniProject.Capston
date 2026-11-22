@@ -12,11 +12,14 @@ public class RestaurantsController : ControllerBase
     {
         _restaurantService = restaurantService;
     }
-
+//  area, page and limit. At limit=5
     [HttpGet]
-    public ActionResult BySearch()
+    public ActionResult BySearch(
+    [FromQuery] string? area,
+    [FromQuery] int page = 1, 
+    [FromQuery] int limit = 5)
     {
-        var result = _restaurantService.Search(null);
+        var result = _restaurantService.Search(area, page, limit);
 
         if(result == null)
         {
@@ -25,4 +28,5 @@ public class RestaurantsController : ControllerBase
 
         return Ok(result);
     }
+
 }

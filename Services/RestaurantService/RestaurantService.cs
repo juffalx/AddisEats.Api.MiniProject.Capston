@@ -6,10 +6,12 @@ namespace AddisEats.Api.MiniProject.Capston.Services.RestaurantService;
 public class RestaurantService : IRestaurantService
 {
     private readonly List<Restaurant> _allDish = Seed.Restaurants; 
-       public List<Restaurant> Search(string? category)
+       public List<Restaurant> Search(string? area, int page, int limit)
     {
         var result = _allDish
-        .Where(r => category == null || r.Area.Trim().ToLowerInvariant() == category.Trim().ToLowerInvariant())
+        .Where(r => area == null || r.Area.Trim().ToLowerInvariant() == area.Trim().ToLowerInvariant())
+        .Skip((page - 1) * limit)
+        .Take(limit)
         .ToList();
 
         return result;
