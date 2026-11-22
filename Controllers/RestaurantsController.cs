@@ -43,4 +43,16 @@ public class RestaurantsController : ControllerBase
 
         return Ok($"{foundRestaunrat.Name} and Menu is :-> {menu}");
     }
+
+    // for test abugitiy
+    // [HttpGet("{ids:int}")]
+    // public IActionResult Test1(int ids)
+    // {
+    //     return Ok($"---> {ids} <---");
+    // }
+    // [HttpGet("{slug:alpha}")]
+    // public IActionResult Test1(string slug)
+    // {
+    //     return Ok($"---> {slug} <---");
+    // }
 }
