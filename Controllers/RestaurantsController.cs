@@ -1,3 +1,4 @@
+using AddisEats.Api.MiniProject.Capston.Models;
 using AddisEats.Api.MiniProject.Capston.Services.RestaurantService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +16,9 @@ public class RestaurantsController : ControllerBase
 //  area, page and limit. At limit=5
     [HttpGet]
     public ActionResult BySearch(
-    [FromQuery] string? area,
-    [FromQuery] int page = 1, 
-    [FromQuery] int limit = 5)
+    [FromQuery] RestaurantQuery r)
     {
-        var result = _restaurantService.Search(area, page, limit);
+        var result = _restaurantService.Search(r);
 
         if(result == null)
         {
@@ -29,7 +28,7 @@ public class RestaurantsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{z:int}/menu")]
+    [HttpGet("{id:int}/menu")]
 
     public ActionResult GetById(int id, [FromQuery] string menu)
     {

@@ -4,6 +4,6 @@ namespace AddisEats.Api.MiniProject.Capston.Services.RestaurantService;
 // and inject it.
 public interface IRestaurantService
 {
-    List<Restaurant> Search(string? area, int page, int limit);
+    List<Restaurant> Search(RestaurantQuery r);
     Restaurant GetById(int id);
 }
