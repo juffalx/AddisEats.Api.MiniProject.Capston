@@ -9,7 +9,8 @@ public class RestaurantService : IRestaurantService
        public List<Restaurant> Search(RestaurantQuery r)
     {
         var result = _allDish
-        .Where(item => r.Area == null || item.Area.Trim().ToLowerInvariant() == r.Area.Trim().ToLowerInvariant())
+        .Where(item => r.Area.Count == 0 || r.Area.Contains(item.Area))
+        // item.Area.Trim().ToLowerInvariant() == r.Area.Trim().ToLowerInvariant())
         .Skip((r.Page - 1) * r.Limit)
         .Take(r.Limit)
         .ToList();

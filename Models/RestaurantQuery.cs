@@ -5,8 +5,8 @@ namespace AddisEats.Api.MiniProject.Capston.Models;
 
 public class RestaurantQuery
 {
-    public string  Area{get; set;} = "";
-    public decimal MaxFeeEtb{get; set;}
+    public List<string>  Area{get; set;} = new();
+        public decimal MaxFeeEtb{get; set;}
     public int Page{get; set;}
     public int Limit{get; set;}
 }
