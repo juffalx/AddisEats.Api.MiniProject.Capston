@@ -29,7 +29,7 @@ public class RestaurantsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{id}/menu")]
+    [HttpGet("{id:int}/menu")]
 
     public ActionResult GetById(int id, [FromQuery] string menu)
     {

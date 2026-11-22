@@ -1,0 +1,42 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C#: Launch Startup Project",
+            "type": "dotnet",
+            "request": "launch",
+            "__csdevkitLaunchStartupProject": true
+        },
+        {
+            "name": "C#: AddisEats.Api.MiniProject.Capston [Default Configuration]",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "D:\\IBT\\Asp.NET\\Mini Project\\AddisEats.Api.MiniProject.Capston\\AddisEats.Api.MiniProject.Capston.csproj"
+        },
+        {
+            "name": "C#: AddisEats.Api.MiniProject.Capston [http]",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "D:\\IBT\\Asp.NET\\Mini Project\\AddisEats.Api.MiniProject.Capston\\AddisEats.Api.MiniProject.Capston.csproj",
+            "launchProfileName": "http",
+            "launchConfigurationId": "http"
+        },
+        {
+            "name": "C#: AddisEats.Api.MiniProject.Capston [https]",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "D:\\IBT\\Asp.NET\\Mini Project\\AddisEats.Api.MiniProject.Capston\\AddisEats.Api.MiniProject.Capston.csproj",
+            "launchProfileName": "https",
+            "launchConfigurationId": "https"
+        },
+        {
+            "name": "C#: Debug Active File",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${file}"
+        }
+    ]
+}
