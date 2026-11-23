@@ -186,3 +186,99 @@ This approach keeps the URL focused on the resource, while query parameters desc
 API paths should describe resources rather than actions. HTTP methods communicate what operation the client wants to perform.
 
 My existing routes already follow this principle, so I did not need to change any controller routes for this exercise.
+
+
+
+
+## Day 57 – Exercise 4: API Error Catalogue
+
+An error catalogue defines the errors that an API can return. Each error has a unique code, an HTTP status code, and a clear message.
+
+The error code helps the client identify the specific problem, the HTTP status communicates the general result, and the message explains what went wrong.
+
+### 1. Error Catalogue
+
+| Error Code | HTTP Status | Message |
+|---|---|---|
+| `VALIDATION_ERROR` | 400 Bad Request | One or more submitted fields contain invalid values. Please check the request and try again. |
+| `INVALID_QUERY_PARAMETER` | 400 Bad Request | One or more query parameters contain invalid values. Please provide valid parameters. |
+| `PRICE_MUST_BE_POSITIVE` | 400 Bad Request | The price must be greater than zero. |
+| `RESOURCE_NOT_FOUND` | 404 Not Found | The requested resource could not be found. |
+| `ROUTE_NOT_FOUND` | 404 Not Found | The requested API endpoint does not exist. |
+| `METHOD_NOT_ALLOWED` | 405 Method Not Allowed | The HTTP method is not supported for this endpoint. |
+| `UNAUTHORIZED` | 401 Unauthorized | Authentication is required. Please provide a valid access token. |
+| `FORBIDDEN` | 403 Forbidden | You do not have permission to perform this operation. |
+| `RESOURCE_CONFLICT` | 409 Conflict | The request conflicts with the current state of the resource. |
+| `INTERNAL_SERVER_ERROR` | 500 Internal Server Error | An unexpected server error occurred. Please try again later. |
+| `SERVICE_UNAVAILABLE` | 503 Service Unavailable | The service is temporarily unavailable. Please try again later. |
+
+### 2. Applying the Catalogue to AddisEats
+
+The following examples show how these errors relate to my current API:
+
+**Example 1: Invalid order price**
+
+When a client submits an order with a price of zero or a negative value, the `OrderService.Add()` method throws an `ArgumentException`.
+
+The intended API response is:
+
+- Error code: `PRICE_MUST_BE_POSITIVE`
+- HTTP status: `400 Bad Request`
+- Message: `The price must be greater than zero.`
+
+**Example 2: Restaurant not found**
+
+When a client requests a restaurant that does not exist through the menu endpoint, the controller returns `NotFound()`.
+
+The corresponding error is:
+
+- Error code: `RESOURCE_NOT_FOUND`
+- HTTP status: `404 Not Found`
+- Message: `The requested resource could not be found.`
+
+**Example 3: Order not found**
+
+When the requested order ID does not exist, the `OrdersController` returns `NotFound()`.
+
+The corresponding error is:
+
+- Error code: `RESOURCE_NOT_FOUND`
+- HTTP status: `404 Not Found`
+- Message: `The requested resource could not be found.`
+
+### 3. Error Response Design
+
+A consistent error response should provide the same structure across API endpoints.
+
+Example:
+
+```json
+{
+  "code": "PRICE_MUST_BE_POSITIVE",
+  "status": 400,
+  "message": "The price must be greater than zero."
+}
+```
+
+The client can use the error code to identify the problem programmatically, while the message provides information that can be displayed to the user.
+
+### 4. Important Design Rules
+
+1. Each error should have a clear and stable error code.
+2. The HTTP status code should correctly represent the type of failure.
+3. Error messages should be understandable and should not expose internal implementation details.
+4. The same error should use the same code and response structure across different endpoints.
+5. Unexpected server exceptions should return a general error message rather than exposing stack traces or sensitive information.
+
+### 5. Current Implementation Status
+
+This catalogue defines the intended API error contract. It is not yet fully implemented in the current project.
+
+The current project has some existing error handling, including `NotFound()` responses and an `ArgumentException` for invalid prices. However, it does not yet have a centralized error response format or global exception-handling middleware.
+
+These improvements can be implemented in the next development stage.
+
+### Conclusion
+
+A consistent error catalogue makes an API easier to understand, debug, and integrate with frontend applications and other services. It also separates internal implementation details from the information returned to API clients.
+```
