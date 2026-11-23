@@ -1,3 +1,5 @@
+using AddisEats.Api.MiniProject.Capston.DTOs;
+using AddisEats.Api.MiniProject.Capston.Mappers;
 using AddisEats.Api.MiniProject.Capston.Models;
 using AddisEats.Api.MiniProject.Capston.Services.RestaurantService;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +15,15 @@ public class RestaurantsController : ControllerBase
     {
         _restaurantService = restaurantService;
     }
+
+    // Get one restaurant
+    [HttpGet("{id}")]
+
+    public ActionResult<RestaurantDTO> GetOne(int id)
+    {
+        return Ok(_restaurantService.GetById(id).ToDTO());
+    }
+
 //  area, page and limit. At limit=5
     [HttpGet]
     public ActionResult BySearch(
