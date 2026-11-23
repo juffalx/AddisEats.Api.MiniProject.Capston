@@ -381,3 +381,21 @@ Choosing the correct HTTP status code helps API clients understand the result of
 - `400 Bad Request` means the submitted request contains invalid data.
 - `403 Forbidden` means the authenticated user lacks permission.
 - `409 Conflict` means the requested operation conflicts with the current resource state.
+
+
+Exercise 7 — Choose REST, GraphQL or gRPC
+1. Public mobile API — REST
+
+I would use REST because it is simple and easy for mobile applications to communicate with. It also supports standard HTTP methods and status codes.
+
+2. Internal service-to-service communication — gRPC
+
+I would use gRPC because it provides fast communication between services. It also uses a clear contract to define how services communicate.
+
+3. Dashboard needing six resources — GraphQL
+
+I would use GraphQL because the dashboard needs data from different resources. It allows the client to request the exact fields it needs in one request.
+Exercise 8 — Unknown query parameters
+I would ignore unknown query parameters and process the parameters that the API supports.
+
+This makes the API easier to use and prevents extra parameters from breaking valid requests. I will use this behaviour consistently across the API.
