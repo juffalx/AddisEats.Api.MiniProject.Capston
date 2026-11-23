@@ -328,9 +328,6 @@ An error catalogue creates a predictable error-handling contract between the bac
 
 This catalogue will serve as the foundation for implementing centralized API error handling in Day 58.
 
-
-
-
 ## Day 57 – Exercise 5: Choosing Correct HTTP Status Codes
 
 ### Scenario 1: A search returns no rows
@@ -382,8 +379,8 @@ Choosing the correct HTTP status code helps API clients understand the result of
 - `403 Forbidden` means the authenticated user lacks permission.
 - `409 Conflict` means the requested operation conflicts with the current resource state.
 
-
 Exercise 7 — Choose REST, GraphQL or gRPC
+
 1. Public mobile API — REST
 
 I would use REST because it is simple and easy for mobile applications to communicate with. It also supports standard HTTP methods and status codes.
@@ -399,3 +396,45 @@ Exercise 8 — Unknown query parameters
 I would ignore unknown query parameters and process the parameters that the API supports.
 
 This makes the API easier to use and prevents extra parameters from breaking valid requests. I will use this behaviour consistently across the API.
+
+## Day 58 — Mini-Project Exercise 1: Audit Existing API Validation
+
+### 1. Existing API Endpoints
+
+#### OrdersController
+
+| HTTP Method | API Path                  | Input               |
+| ----------- | ------------------------- | ------------------- |
+| GET         | `/api/v1/orders/{id:int}` | Route parameter: id |
+| POST        | `/api/v1/orders`          | OrderCreateDTO      |
+
+#### RestaurantsController
+
+| HTTP Method | API Path                        | Input                                      |
+| ----------- | ------------------------------- | ------------------------------------------ |
+| GET         | `/api/v1/Restaurants/{id}`      | Route parameter: id                        |
+| GET         | `/api/v1/Restaurants`           | RestaurantQuery                            |
+| GET         | `/api/v1/Restaurants/{id}/menu` | Route parameter: id, query parameter: menu |
+
+### 2. Existing Validation
+
+- Both controllers use `[ApiController]`.
+- Orders GET endpoint uses an integer route constraint.
+- Orders GET endpoint checks whether the requested order exists.
+- Restaurant search uses `RestaurantQuery` with Area, MaxFeeEtb, Page, and Limit.
+- Restaurant GET endpoints check for missing restaurants in some actions.
+- No explicit data annotation validation was found in the inspected request types.
+
+### 3. Missing Validation
+
+- Add `[Required]` and appropriate length limits to required string inputs.
+- Validate positive quantities and monetary values.
+- Validate `RestaurantQuery` pagination values: Page must be at least 1 and Limit must be within an acceptable range.
+- Ensure MaxFeeEtb cannot be negative.
+- Validate Area entries and other query parameters.
+- Add an integer route constraint to the restaurant GET-by-ID endpoint.
+- Review the purpose of OrderCreateDTO and ensure client input cannot control trusted menu prices.
+
+### 4. Conclusion
+
+The existing API has basic route and resource-existence checks, but it needs stronger request validation, custom validation attributes, and consistent error handling. These improvements will be implemented in the following exercises.
