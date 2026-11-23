@@ -327,3 +327,57 @@ The HTTP response status should be `404 Not Found`.
 An error catalogue creates a predictable error-handling contract between the backend and its clients. Frontend applications can use error codes to identify problems and respond appropriately without depending on inconsistent message text.
 
 This catalogue will serve as the foundation for implementing centralized API error handling in Day 58.
+
+
+
+
+## Day 57 – Exercise 5: Choosing Correct HTTP Status Codes
+
+### Scenario 1: A search returns no rows
+
+**Status Code: 200 OK**
+
+Justification:
+
+The search request was valid and successfully processed. An empty result does not mean the request failed. The API should return `200 OK` with an empty array because no matching resources were found.
+
+Example response:
+
+```json
+{
+  "data": []
+}
+```
+
+### Scenario 2: Cancelling an order that has already been delivered
+
+**Status Code: 409 Conflict**
+
+Justification:
+
+The request may be valid, but cancelling an order that has already been delivered conflicts with the current state of that order. The API should return `409 Conflict` because the requested operation cannot be performed in the resource's current state.
+
+### Scenario 3: A request contains a negative ETB total
+
+**Status Code: 400 Bad Request**
+
+Justification:
+
+A negative order total is invalid input because an order cannot have a negative price. The API should reject the request with `400 Bad Request` and explain that the submitted total must be zero or greater, or strictly positive if the business rules require it.
+
+### Scenario 4: A valid token belonging to a courier attempts to edit a menu
+
+**Status Code: 403 Forbidden**
+
+Justification:
+
+The token is valid, so the courier is authenticated. However, the courier does not have permission to edit menu information. The API should return `403 Forbidden` because the authenticated user is not authorized to perform this operation.
+
+### Conclusion
+
+Choosing the correct HTTP status code helps API clients understand the result of their requests.
+
+- `200 OK` means the request succeeded, even if the result is empty.
+- `400 Bad Request` means the submitted request contains invalid data.
+- `403 Forbidden` means the authenticated user lacks permission.
+- `409 Conflict` means the requested operation conflicts with the current resource state.
