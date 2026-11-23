@@ -31,19 +31,17 @@ ASP.NET Core routing requires each incoming request to resolve to a single endpo
 
 Ambiguous routes cause runtime exceptions. I learned how to resolve routing conflicts using route constraints and distinct literal paths.
 
-
-
 ## Day 57 – Exercise 1: Complete API Route Table
 
 This table documents the routes currently implemented in my AddisEats API. It includes each HTTP method, route, purpose, success status code, and possible failure status codes.
 
-| Method | Path | Purpose | Success Code | Failure Codes |
-|---|---|---|---|---|
-| GET | `/api/v1/restaurants` | Returns restaurants, with optional area filtering and pagination through query parameters such as `area`, `page`, and `limit`. | 200 OK | 400 Bad Request, 404 Not Found, 405 Method Not Allowed, 500 Internal Server Error |
-| GET | `/api/v1/restaurants/{id}` | Returns one restaurant using its ID and maps the result to a RestaurantDTO. | 200 OK | 400 Bad Request, 404 Not Found, 405 Method Not Allowed, 500 Internal Server Error |
-| GET | `/api/v1/restaurants/{id:int}/menu` | Returns the restaurant name and the menu value supplied through the `menu` query parameter. | 200 OK | 404 Not Found, 405 Method Not Allowed |
-| GET | `/api/v1/orders/{id:int}` | Returns an order item using its ID. | 200 OK | 404 Not Found, 405 Method Not Allowed |
-| POST | `/api/v1/orders` | Creates a new menu item from the submitted OrderCreateDTO and returns the created result. | 201 Created | 400 Bad Request, 405 Method Not Allowed, 500 Internal Server Error |
+| Method | Path                                | Purpose                                                                                                                        | Success Code | Failure Codes                                                                     |
+| ------ | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------ | --------------------------------------------------------------------------------- |
+| GET    | `/api/v1/restaurants`               | Returns restaurants, with optional area filtering and pagination through query parameters such as `area`, `page`, and `limit`. | 200 OK       | 400 Bad Request, 404 Not Found, 405 Method Not Allowed, 500 Internal Server Error |
+| GET    | `/api/v1/restaurants/{id}`          | Returns one restaurant using its ID and maps the result to a RestaurantDTO.                                                    | 200 OK       | 400 Bad Request, 404 Not Found, 405 Method Not Allowed, 500 Internal Server Error |
+| GET    | `/api/v1/restaurants/{id:int}/menu` | Returns the restaurant name and the menu value supplied through the `menu` query parameter.                                    | 200 OK       | 404 Not Found, 405 Method Not Allowed                                             |
+| GET    | `/api/v1/orders/{id:int}`           | Returns an order item using its ID.                                                                                            | 200 OK       | 404 Not Found, 405 Method Not Allowed                                             |
+| POST   | `/api/v1/orders`                    | Creates a new menu item from the submitted OrderCreateDTO and returns the created result.                                      | 201 Created  | 400 Bad Request, 405 Method Not Allowed, 500 Internal Server Error                |
 
 ### Failure Status Code Explanations
 
@@ -64,3 +62,76 @@ This table documents the routes currently implemented in my AddisEats API. It in
 ### Conclusion
 
 A route table helps document the public API contract. It makes the supported endpoints, expected responses, and possible errors clear to developers who use or maintain the API. It also helps identify implementation problems that should be corrected in later development.
+
+## Day 57 – Exercise 2: Identifiers and Filters in API Routes
+
+An identifier is used to identify a specific resource. A filter is used to narrow down a collection of resources based on certain conditions.
+
+I reviewed all the routes in my API and classified their path segments.
+
+### 1. Route Segment Classification
+
+| HTTP Method | Route                               | Path Segment  | Classification         |
+| ----------- | ----------------------------------- | ------------- | ---------------------- |
+| GET         | `/api/v1/restaurants`               | `api`         | API prefix             |
+| GET         | `/api/v1/restaurants`               | `v1`          | API version            |
+| GET         | `/api/v1/restaurants`               | `restaurants` | Resource collection    |
+| GET         | `/api/v1/restaurants/{id}`          | `{id}`        | Identifier             |
+| GET         | `/api/v1/restaurants/{id:int}/menu` | `{id:int}`    | Identifier             |
+| GET         | `/api/v1/restaurants/{id:int}/menu` | `menu`        | Sub-resource           |
+| GET         | `/api/v1/orders/{id:int}`           | `{id:int}`    | Identifier             |
+| POST        | `/api/v1/orders`                    | `orders`      | Resource collection    |
+| POST        | `/api/v1/orders`                    | `api/v1`      | API prefix and version |
+
+The API prefix, version, resource names, and sub-resource names are structural route segments. They are not identifiers or filters.
+
+### 2. Identifiers
+
+The following route parameters are identifiers:
+
+- `/api/v1/restaurants/{id}` identifies a specific restaurant.
+- `/api/v1/restaurants/{id:int}/menu` identifies the restaurant whose menu is requested.
+- `/api/v1/orders/{id:int}` identifies a specific order.
+
+The `id` parameter is an identifier because it points to one specific resource.
+
+### 3. Filters
+
+My restaurant search uses query parameters instead of placing filters in the route path.
+
+The `RestaurantQuery` class contains:
+
+- `Area`: filters restaurants by area.
+- `MaxFeeEtb`: filters restaurants by maximum fee.
+- `Page`: selects the result page.
+- `Limit`: controls the number of results returned per page.
+
+These values are received through `[FromQuery] RestaurantQuery r`.
+
+Example:
+
+`GET /api/v1/restaurants?Area=Bole&MaxFeeEtb=100&Page=1&Limit=5`
+
+The menu endpoint also receives `menu` through `[FromQuery]`, not through a dynamic path segment.
+
+Example:
+
+`GET /api/v1/restaurants/1/menu?menu=Breakfast`
+
+### 4. Changes Made
+
+After reviewing my routes, I found that no filter was incorrectly placed in a dynamic path segment.
+
+I therefore did not need to move any existing path parameter.
+
+The current route design separates the responsibilities:
+
+- Identifiers belong in the route path.
+- Search conditions and pagination belong in query parameters.
+- Resource names and sub-resource names describe the API structure.
+
+### 5. Conclusion
+
+Identifiers help the API locate a specific resource, while filters help clients search and narrow down collections.
+
+Keeping identifiers in route paths and filters in query parameters makes API routes easier to understand, maintain, and use.
