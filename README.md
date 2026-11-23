@@ -135,3 +135,54 @@ The current route design separates the responsibilities:
 Identifiers help the API locate a specific resource, while filters help clients search and narrow down collections.
 
 Keeping identifiers in route paths and filters in query parameters makes API routes easier to understand, maintain, and use.
+
+## Day 57 – Exercise 3: Remove Verbs from API Paths
+
+I reviewed all the routes in my API to identify action verbs used in URL paths.
+
+### 1. Existing Route Review
+
+| Existing Route                      | HTTP Method | Path Analysis                                                                    |
+| ----------------------------------- | ----------- | -------------------------------------------------------------------------------- |
+| `/api/v1/Restaurants`               | GET         | `Restaurants` is a resource collection name.                                     |
+| `/api/v1/Restaurants/{id}`          | GET         | `Restaurants` is a resource name, and `{id}` identifies one restaurant.          |
+| `/api/v1/Restaurants/{id:int}/menu` | GET         | `Restaurants` and `menu` are resource names. `{id:int}` identifies a restaurant. |
+| `/api/v1/orders/{id:int}`           | GET         | `orders` is a resource name, and `{id:int}` identifies an order.                 |
+| `/api/v1/orders`                    | POST        | `orders` is a resource collection name.                                          |
+
+### 2. Identified Verbs
+
+I did not find any action verbs in my existing route paths.
+
+The action names are represented by HTTP methods instead:
+
+- GET retrieves resources.
+- POST creates a resource.
+
+For example, the `BySearch` action method does not introduce a verb into the URL. The actual route remains `/api/v1/Restaurants`, and search conditions are supplied through query parameters.
+
+### 3. Three Naming Approaches
+
+Since my existing API routes do not contain action verbs, there are no incorrect verb-based paths that need to be rewritten.
+
+For comparison, if a restaurant search endpoint were designed using a verb-based path such as `/api/v1/restaurants/search`, it could be represented in three ways:
+
+| Approach                       | Example                                    | Explanation                                                       |
+| ------------------------------ | ------------------------------------------ | ----------------------------------------------------------------- |
+| Verb in the path               | `GET /api/v1/restaurants/search`           | Places the search action in the URL.                              |
+| Resource-based path            | `GET /api/v1/restaurants`                  | Uses the restaurant collection as the resource.                   |
+| Resource with query parameters | `GET /api/v1/restaurants?area=Bole&page=1` | Uses the collection route and query parameters to filter results. |
+
+### 4. My Choice
+
+I choose the resource-based route with query parameters:
+
+`GET /api/v1/restaurants?area=Bole&page=1`
+
+This approach keeps the URL focused on the resource, while query parameters describe how the client wants to filter the results.
+
+### 5. Conclusion
+
+API paths should describe resources rather than actions. HTTP methods communicate what operation the client wants to perform.
+
+My existing routes already follow this principle, so I did not need to change any controller routes for this exercise.
