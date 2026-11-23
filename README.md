@@ -187,9 +187,6 @@ API paths should describe resources rather than actions. HTTP methods communicat
 
 My existing routes already follow this principle, so I did not need to change any controller routes for this exercise.
 
-
-
-
 ## Day 57 – Exercise 4: API Error Catalogue
 
 An error catalogue defines the errors that an API can return. Each error has a unique code, an HTTP status code, and a clear message.
@@ -198,19 +195,19 @@ The error code helps the client identify the specific problem, the HTTP status c
 
 ### 1. Error Catalogue
 
-| Error Code | HTTP Status | Message |
-|---|---|---|
-| `VALIDATION_ERROR` | 400 Bad Request | One or more submitted fields contain invalid values. Please check the request and try again. |
-| `INVALID_QUERY_PARAMETER` | 400 Bad Request | One or more query parameters contain invalid values. Please provide valid parameters. |
-| `PRICE_MUST_BE_POSITIVE` | 400 Bad Request | The price must be greater than zero. |
-| `RESOURCE_NOT_FOUND` | 404 Not Found | The requested resource could not be found. |
-| `ROUTE_NOT_FOUND` | 404 Not Found | The requested API endpoint does not exist. |
-| `METHOD_NOT_ALLOWED` | 405 Method Not Allowed | The HTTP method is not supported for this endpoint. |
-| `UNAUTHORIZED` | 401 Unauthorized | Authentication is required. Please provide a valid access token. |
-| `FORBIDDEN` | 403 Forbidden | You do not have permission to perform this operation. |
-| `RESOURCE_CONFLICT` | 409 Conflict | The request conflicts with the current state of the resource. |
-| `INTERNAL_SERVER_ERROR` | 500 Internal Server Error | An unexpected server error occurred. Please try again later. |
-| `SERVICE_UNAVAILABLE` | 503 Service Unavailable | The service is temporarily unavailable. Please try again later. |
+| Error Code                | HTTP Status               | Message                                                                                      |
+| ------------------------- | ------------------------- | -------------------------------------------------------------------------------------------- |
+| `VALIDATION_ERROR`        | 400 Bad Request           | One or more submitted fields contain invalid values. Please check the request and try again. |
+| `INVALID_QUERY_PARAMETER` | 400 Bad Request           | One or more query parameters contain invalid values. Please provide valid parameters.        |
+| `PRICE_MUST_BE_POSITIVE`  | 400 Bad Request           | The price must be greater than zero.                                                         |
+| `RESOURCE_NOT_FOUND`      | 404 Not Found             | The requested resource could not be found.                                                   |
+| `ROUTE_NOT_FOUND`         | 404 Not Found             | The requested API endpoint does not exist.                                                   |
+| `METHOD_NOT_ALLOWED`      | 405 Method Not Allowed    | The HTTP method is not supported for this endpoint.                                          |
+| `UNAUTHORIZED`            | 401 Unauthorized          | Authentication is required. Please provide a valid access token.                             |
+| `FORBIDDEN`               | 403 Forbidden             | You do not have permission to perform this operation.                                        |
+| `RESOURCE_CONFLICT`       | 409 Conflict              | The request conflicts with the current state of the resource.                                |
+| `INTERNAL_SERVER_ERROR`   | 500 Internal Server Error | An unexpected server error occurred. Please try again later.                                 |
+| `SERVICE_UNAVAILABLE`     | 503 Service Unavailable   | The service is temporarily unavailable. Please try again later.                              |
 
 ### 2. Applying the Catalogue to AddisEats
 
@@ -281,4 +278,52 @@ These improvements can be implemented in the next development stage.
 ### Conclusion
 
 A consistent error catalogue makes an API easier to understand, debug, and integrate with frontend applications and other services. It also separates internal implementation details from the information returned to API clients.
-```
+
+````
+
+## Day 57 – Exercise 4: API Error Catalogue
+
+An API error catalogue defines the errors that an API can return. Each error has a unique code, an HTTP status code, and a clear message.
+
+Using a consistent error catalogue makes the API easier to understand, debug, maintain, and integrate with frontend applications.
+
+### Error Catalogue
+
+| Error Code | HTTP Status | Message | When It Is Returned |
+|---|---|---|---|
+| `VALIDATION_ERROR` | 400 Bad Request | The request contains invalid data. Please check the submitted values. | The request contains missing, invalid, or incorrectly formatted values. |
+| `UNAUTHORIZED` | 401 Unauthorized | Authentication is required to access this resource. | The client does not provide a valid authentication token. |
+| `FORBIDDEN` | 403 Forbidden | You do not have permission to perform this operation. | The user is authenticated but does not have the required permission. |
+| `RESOURCE_NOT_FOUND` | 404 Not Found | The requested resource could not be found. | The requested restaurant, order, or other resource does not exist. |
+| `METHOD_NOT_ALLOWED` | 405 Method Not Allowed | The requested HTTP method is not supported for this endpoint. | The client uses an HTTP method that the endpoint does not support. |
+| `RESOURCE_CONFLICT` | 409 Conflict | The request conflicts with the current state of the resource. | The requested operation cannot be completed because of the resource's current state. |
+| `RATE_LIMIT_EXCEEDED` | 429 Too Many Requests | Too many requests have been sent. Please try again later. | The client sends more requests than the API allows within a specified period. |
+| `INTERNAL_SERVER_ERROR` | 500 Internal Server Error | An unexpected server error occurred. Please try again later. | An unexpected error occurs while the server processes a request. |
+
+### Design Rules
+
+1. Every error has a unique, consistent code.
+2. Each error code is associated with an appropriate HTTP status.
+3. Error messages should be clear and understandable to API clients.
+4. Error messages must not expose passwords, access tokens, database details, stack traces, or other sensitive internal information.
+5. The same error should use the same code and message format across different endpoints.
+6. The API should return the appropriate HTTP status instead of returning `200 OK` for failed requests.
+
+### Example Error Response
+
+When a client requests a restaurant that does not exist, the API can return:
+
+```json
+{
+  "code": "RESOURCE_NOT_FOUND",
+  "message": "The requested resource could not be found."
+}
+````
+
+The HTTP response status should be `404 Not Found`.
+
+### Conclusion
+
+An error catalogue creates a predictable error-handling contract between the backend and its clients. Frontend applications can use error codes to identify problems and respond appropriately without depending on inconsistent message text.
+
+This catalogue will serve as the foundation for implementing centralized API error handling in Day 58.
