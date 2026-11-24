@@ -1,5 +1,6 @@
 
 using System.ComponentModel.DataAnnotations;
+using AddisEats.Api.MiniProject.Capston.Validation;
 
 namespace AddisEats.Api.MiniProject.Capston.DTOs;
 

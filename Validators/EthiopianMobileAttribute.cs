@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
+namespace AddisEats.Api.MiniProject.Capston.Validation;
+
 public class EthiopianMobileAttribute : ValidationAttribute
 {
     private static readonly Regex Pattern =
