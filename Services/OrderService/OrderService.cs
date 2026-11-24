@@ -46,7 +46,7 @@ public class OrderService : IOrderService
         MenuItemId = menuItem.Id,
         Area = req.Area,
         Qty = req.Qty,
-        TotalAmount = total
+        TotalAmount = total // should be calculated in order service, not in controller or DTO.
     };
 
     _Orders.Add(result);
