@@ -31,6 +31,7 @@ public class OrderService : IOrderService
     var result = new Order()
     {
         Id = NextId++,
+        CustomerPhone = req.CustomerPhone,
         RestaurantId = restaurant.Id,
         MenuItemId = menuItem.Id,
         Area = req.Area,

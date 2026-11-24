@@ -7,6 +7,9 @@ public class CreateOrderRequest
 {
     [Range(1, int.MaxValue, ErrorMessage = "MenuItemId Should Possitive Number")]
     public int MenuItemId {get; set;}
+    [EthiopianMobile]
+    public string CustomerPhone { get; set; } = string.Empty;
+
     [Required(ErrorMessage = "RestaurantId is Required!")]
     [Range(1, int.MaxValue, ErrorMessage = "RestaurantId Should Possitive Number")]
     public int RestaurantId { get; set; }
@@ -16,4 +19,5 @@ public class CreateOrderRequest
     public string Area { get; set; } = string.Empty;
     [Range(1, 50, ErrorMessage = "Quantity should between 1 and 50")]
     public int Qty{get; set;}
+
 }

@@ -438,3 +438,45 @@ This makes the API easier to use and prevents extra parameters from breaking val
 ### 4. Conclusion
 
 The existing API has basic route and resource-existence checks, but it needs stronger request validation, custom validation attributes, and consistent error handling. These improvements will be implemented in the following exercises.
+
+## Day 58 — Exercise 2: Ethiopian Mobile Validation
+
+### Successful API requests
+
+All four requests below were accepted by the API. They used the same valid local phone number.
+
+| Order ID | Customer Phone | Restaurant ID | Menu Item ID | Area      | Qty | Total |
+| -------- | -------------- | ------------: | -----------: | --------- | --: | ----: |
+| 1        | 0950998877     |             1 |            3 | Bole      |   8 |   960 |
+| 2        | 0950998877     |             1 |            5 | Kazanchis |   6 |   960 |
+| 3        | 0950998877     |             4 |            2 | Bole      |   3 |   960 |
+| 4        | 0950998877     |             2 |            3 | Kazanchis |   7 |   960 |
+
+### Invalid phone number tests
+
+These phone numbers were rejected by validation:
+
+| Customer Phone | Result  |
+| -------------- | ------- |
+| +252950998877  | Invalid |
+| 06950998877    | Invalid |
+| 04950998877    | Invalid |
+| 5099887700     | Invalid |
+
+Validation error:
+
+```json
+{
+  "CustomerPhone": [
+    "Enter a valid Ethiopian mobile number starting with 09, 07, +2519 or +2517."
+  ]
+}
+```
+
+### Remaining valid format tests
+
+- 0712345678
+- +251912345678
+- +251712345678
+
+Expected result: Valid.
