@@ -27,15 +27,26 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateOrder(OrderCreateDTO order)
+public IActionResult CreateOrder(CreateOrderRequest req)
+{
+    try
     {
-        var result = _OrderService.Add(order);
+        var result = _OrderService.Add(req);
 
         return CreatedAtAction(
-            nameof(CreateOrder),
-            new {id = result.Id},
+            nameof(GetOrderById),
+            new { id = result.Id },
             result
-            
         );
     }
+    catch (ArgumentException ex)
+    {
+        return BadRequest(new { message = ex.Message });
+    }
+    catch (KeyNotFoundException ex)
+    {
+        return NotFound(new { message = ex.Message });
+    }
+}
+
 }
