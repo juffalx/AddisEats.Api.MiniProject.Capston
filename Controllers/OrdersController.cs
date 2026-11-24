@@ -29,24 +29,21 @@ public class OrdersController : ControllerBase
     [HttpPost]
 public IActionResult CreateOrder(CreateOrderRequest req)
 {
-    try
-    {
-        var result = _OrderService.Add(req);
+    var result = _OrderService.Add(req);
 
+    if (result.IsSuccess)
+    {
         return CreatedAtAction(
             nameof(GetOrderById),
-            new { id = result.Id },
-            result
+            new { id = result.Value!.Id },
+            result.Value
         );
     }
-    catch (ArgumentException ex)
-    {
-        return BadRequest(new { message = ex.Message });
-    }
-    catch (KeyNotFoundException ex)
-    {
-        return NotFound(new { message = ex.Message });
-    }
-}
 
+    return BadRequest(new
+    {
+        code = result.Error!.Code,
+        message = result.Error.Message
+    });
+}
 }

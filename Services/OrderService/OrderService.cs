@@ -1,5 +1,6 @@
 using AddisEats.Api.MiniProject.Capston.DTOs;
 using AddisEats.Api.MiniProject.Capston.Datas;
+using AddisEats.Api.MiniProject.Capston.Results;
 using System.Linq;
 namespace AddisEats.Api.MiniProject.Capston.Services.OrderService;
 public class OrderService : IOrderService
@@ -9,22 +10,31 @@ public class OrderService : IOrderService
    private static readonly List<Order> _Orders = new();
 
     private static int NextId = 1;
-    public Order Add(CreateOrderRequest req)
+    public Result<Order> Add(CreateOrderRequest req)
 {
     if (req.Qty <= 0)
-        throw new ArgumentException("Quantity must be greater than zero.");
+        return Result<Order>.Failure( new Error{
+            Code = "Invalid_Quantity", 
+            Message  = "Quantity must be greater than zero."
+        });
 
     var restaurant = Seed.Restaurants
         .FirstOrDefault(r => r.Id == req.RestaurantId && r.IsActive);
 
     if (restaurant is null)
-        throw new KeyNotFoundException("Restaurant not found or inactive.");
+        return Result<Order>.Failure( new Error{
+            Code = "Restaurant_Not_Found",
+            Message = "Restaurant not found or inactive."
+        });
 
     var menuItem = Seed._MenuItems
         .FirstOrDefault(m => m.Id == req.MenuItemId);
 
     if (menuItem is null)
-        throw new KeyNotFoundException("Menu item not found.");
+        return Result<Order>.Failure( new Error{
+            Code = "Menu_Item_Not_Found",
+            Message = "Menu item not found."
+        });
 
     decimal total = menuItem.Price * req.Qty;
 
@@ -41,7 +51,7 @@ public class OrderService : IOrderService
 
     _Orders.Add(result);
 
-    return result;
+    return Result<Order>.Success(result);
 }
 
    
