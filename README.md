@@ -481,17 +481,16 @@ Validation error:
 
 Expected result: Valid.
 
-
-
-
 ## Day 58 — Validation, Result Pattern & Exception Middleware
 
 ### Exercise 1: DataAnnotations Validation
+
 - Added built-in DataAnnotations to `CreateOrderRequest`.
 - Used `[Required]`, `[Range]`, `[StringLength]`, and `[MinLength]`.
 - Tested invalid input and confirmed automatic HTTP 400 validation responses.
 
 ### Exercise 2: Ethiopian Mobile Validation
+
 - Created custom `EthiopianMobileAttribute`.
 - Extended `ValidationAttribute`.
 - Supported Ethiopian mobile formats:
@@ -502,18 +501,27 @@ Expected result: Valid.
 - Tested valid and invalid phone numbers.
 
 ### Exercise 3: ETB Amount Validation
+
 - Created custom `EtbAmountAttribute`.
 - Checked that amounts are greater than zero.
 - Allowed a maximum of two decimal places.
 - Used `ValidationResult` to return validation errors.
 
 ### Exercise 4: Cross-Property Validation
+
 - Created `OrderValidationDemo` implementing `IValidatableObject`.
 - Implemented the `Validate()` method.
 - Practiced validating relationships between multiple properties using `ValidationContext` and `ValidationResult`.
 
 ### Exercise 5: Generic Result Pattern
+
 - Created `Result<T>` and `Error` classes.
 - Added static `Success()` and `Failure()` factory methods.
 - Updated `IOrderService.Add()` and `OrderService.Add()` to return `Result<Order>`.
 - Replaced expected business exceptions with structured
+
+### Exercise 6 — Authentication vs Authorization
+
+The test was not applicable to this mini-project because the `/admin` endpoint is protected by custom API-key middleware, not ASP.NET Core authentication and authorization.
+
+Therefore, reversing `UseAuthentication()` and `UseAuthorization()` did not demonstrate the expected behavior. A proper test requires an authenticated endpoint protected with `[Authorize]`.
