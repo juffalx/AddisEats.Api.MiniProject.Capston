@@ -28,6 +28,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 
+
 // app.MapGet("/test-error", () =>
 // {
 //     throw new Exception("Test exception");
@@ -38,7 +39,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors("frontend");
 app.UseHttpsRedirection();
