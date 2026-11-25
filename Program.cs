@@ -1,4 +1,5 @@
 
+using AddisEats.Api.MiniProject.Capston.Filters;
 using AddisEats.Api.MiniProject.Capston.Middleware;
 using AddisEats.Api.MiniProject.Capston.Services.OrderService;
 using AddisEats.Api.MiniProject.Capston.Services.RestaurantService;
@@ -23,7 +24,13 @@ builder.Services.AddControllers()
         o.JsonSerializerOptions.Converters.Add(
             new JsonStringEnumConverter()
         );
+    })
+    .AddMvcOptions(options =>
+    {
+        options.Filters.AddService<AuditActionFilter>();
     });
+
+builder.Services.AddScoped<AuditActionFilter>();
 var app = builder.Build();
 
 app.Map("/admin", adminApp =>
@@ -43,12 +50,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseMiddleware<CorrelationIdMiddleware>();
+
 app.UseMiddleware<RequestTimingMiddleware>();
 
 app.UseCors("frontend");
+
 app.UseHttpsRedirection();
+
 app.UseAuthorization();
+
 app.MapControllers();
 
 
