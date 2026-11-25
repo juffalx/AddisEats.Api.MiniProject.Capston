@@ -2,6 +2,7 @@
 using AddisEats.Api.MiniProject.Capston.Middleware;
 using AddisEats.Api.MiniProject.Capston.Services.OrderService;
 using AddisEats.Api.MiniProject.Capston.Services.RestaurantService;
+using AddisEats.Api.MiniProject.Capston.Services.Test;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -9,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<TestScopedService>();
 builder.Services.AddControllers()
     .AddJsonOptions(o =>
     {
