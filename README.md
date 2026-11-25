@@ -525,3 +525,24 @@ Expected result: Valid.
 The test was not applicable to this mini-project because the `/admin` endpoint is protected by custom API-key middleware, not ASP.NET Core authentication and authorization.
 
 Therefore, reversing `UseAuthentication()` and `UseAuthorization()` did not demonstrate the expected behavior. A proper test requires an authenticated endpoint protected with `[Authorize]`.
+
+## Exercise 8 — Final Middleware Pipeline
+
+The middleware pipeline is executed in the order registered in `Program.cs`.
+
+1. **Admin Map branch:** Applies `ApiKeyMiddleware` only to `/admin` requests.
+2. **Swagger:** Provides API documentation in Development.
+3. **ExceptionMiddleware:** Catches unhandled exceptions from downstream middleware.
+4. **CorrelationIdMiddleware:** Accepts or generates a correlation ID and returns it in the response header.
+5. **RequestTimingMiddleware:** Measures request execution time and logs the status and duration.
+6. **CORS:** Controls cross-origin requests.
+7. **HTTPS Redirection:** Redirects HTTP requests to HTTPS.
+8. **Authorization:** Handles authorization policies.
+9. **MapControllers:** Maps requests to controller endpoints.
+10. **Run:** Starts the application.
+
+### Notes
+
+- Authentication and authorization ordering should be tested with an endpoint configured for ASP.NET Core authentication and `[Authorize]`.
+- Rate limiting and authentication can be added before authorization when configured.
+- The `/admin` API-key branch is separate from the main pipeline.
