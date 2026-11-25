@@ -24,6 +24,11 @@ builder.Services.AddControllers()
     });
 var app = builder.Build();
 
+app.Map("/admin", adminApp =>
+{
+    adminApp.UseMiddleware<ApiKeyMiddleware>();
+
+});
 
 // app.MapGet("/test-error", () =>
 // {
