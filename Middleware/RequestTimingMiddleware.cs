@@ -35,25 +35,28 @@ public class RequestTimingMiddleware
             var method = context.Request.Method;
             var path = context.Request.Path;
             var status = context.Response.StatusCode;
+            var correlationId = context.TraceIdentifier;
 
             // ከ ሰከንድ በላይ ከቆየ logWarning እና ተቃራኒ ከሆነ ደግሞ logInformation እናደርጋለን
             if (elapsedMilliseconds > 1000)
             {
                 _logger.LogWarning(
-                    "Request {Method} {Path} Status {Status} executed in {ElapsedMilliseconds} ms",
+                    "Request {Method} {Path} Status {Status} executed in {ElapsedMilliseconds} ms (Correlation ID: {CorrelationId})",
                     method,
                     path,
                     status,
-                    elapsedMilliseconds);
+                    elapsedMilliseconds,
+                    correlationId);
             }
             else
             {
                 _logger.LogInformation(
-                    "Request {Method} {Path} Status {Status} executed in {ElapsedMilliseconds} ms",
+                    "Request {Method} {Path} Status {Status} executed in {ElapsedMilliseconds} ms (Correlation ID: {CorrelationId}) ",
                     method,
                     path,
                     status,
-                    elapsedMilliseconds);
+                    elapsedMilliseconds,
+                    correlationId);
             }
         }
     }

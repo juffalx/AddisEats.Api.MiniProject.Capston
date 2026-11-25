@@ -6,7 +6,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IRestaurantService, RestaurantService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddControllers()
     .AddJsonOptions(o =>
     {
@@ -20,12 +22,6 @@ builder.Services.AddControllers()
             new JsonStringEnumConverter()
         );
     });
-
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddScoped<IRestaurantService, RestaurantService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-
 var app = builder.Build();
 
 
@@ -39,8 +35,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<CorrelationIdMiddleware>();
+app.UseMiddleware<RequestTimingMiddleware>();
+
 app.UseCors("frontend");
 app.UseHttpsRedirection();
 app.UseAuthorization();
